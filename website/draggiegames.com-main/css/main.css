@@ -1,0 +1,314 @@
+/* draggiegames.com - custom main css */
+/* last updated: January 20th, 2024 23:15PM */
+
+
+
+
+/* Common styles */
+* {
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+body {
+    margin: 0;
+    background-color: #dbdbdb !important;
+    /* fallback colour - this will be overridden by the media queries below */
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.container {
+    margin: 0 auto;
+    width: 80%;
+    text-align: center;
+}
+
+
+
+
+
+/* Custom fonts */
+@font-face {
+    font-family: 'ObsidianBlade';
+    src: url('/static/fonts/ObsidianBlade.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: url('/static/fonts/Lato.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'LethalInjector';
+    src: url('/static/fonts/BlackletterExtrabold.ttf') format('truetype');
+}
+
+
+
+
+
+
+
+/* Common classes */
+.deadly-font {
+    font-family: 'ObsidianBlade';
+}
+
+.generic-para,
+.generic-para1 a,
+.generic-title,
+.generic-title-deadlyblade {
+    margin: 0 auto;
+    width: 80%;
+    text-align: center;
+    font-size: 1.5em;
+}
+
+.generic-title-deadlyblade {
+    font-size: 3.5em;
+    font-family: 'ObsidianBlade';
+}
+
+
+#carouselwrapper-mini,
+#gameInfo {
+    margin: 0 auto;
+    width: 80%;
+    text-align: center;
+    font-size: 1em;
+}
+
+
+.carousel-item img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.gameInfoName {
+    color: #00000080;
+    text-align: center;
+    font-size: 3em;
+    font-family: 'ObsidianBlade';
+}
+
+body {
+    font-family: Arial, sans-serif;
+    color: #000000;
+}
+
+.bold-and-centered {
+    font-weight: bold;
+    text-align: center;
+    /* font-size: 2em; */
+    /* This is set in Bootstrap */
+    color: #dfa300;
+    padding-top: 20px;
+}
+
+.really-bold-and-centered {
+    font-weight: bold;
+    text-align: center;
+    font-size: 3em;
+    color: #ffffff;
+    padding-top: 20px;
+}
+
+
+
+.lead {
+    font-size: 1.5em;
+    color: #000000;
+    text-align: center;
+}
+
+.minimalistic {
+    padding: 20px;
+    background-color: #dbdbdb;
+    /* text-align: center; */
+}
+
+.minimalistic ul {
+    list-style-type: none;
+    padding: 5px;
+
+}
+
+.minimalistic ul li a {
+    color: #00acff;
+    text-decoration: none;
+}
+
+.minimalistic h2 {
+    font-weight: bold;
+    text-align: center;
+}
+
+
+/* CAROUSEL ITEMS AT BASE OF PAGE */
+
+.carousel {
+    width: 100%;
+    overflow: hidden;
+}
+
+.carousel-item {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    background-color: #dbdbdb;
+    justify-content: center;
+    /* this fixes alignment */
+    align-items: center;
+}
+
+.carousel-item img {
+    width: 40%;
+    height: auto;
+    object-fit: contain !important;
+}
+
+.carousel-item p {
+    font-size: 1.5em;
+    color: #000000;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.carousel-item h3 {
+    color: #ff6a25;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* GENERIC INSIGHTFUL DIV STYLES */
+
+.insightful {
+    padding: 20px;
+    background-color: #acacac;
+    color: #ffffff;
+    text-align: center;
+}
+
+
+.minimalistic #news {
+    background-color: #acacac;
+}
+
+
+/* reference: https://www.w3schools.com/cssref/css_units.asp */
+.main_p_text {
+    font-size: 1.25rem;
+    /* rem is relative and to do with the ROOT font size */
+    font-weight: 350;
+}
+
+.indexButton {
+    margin-bottom: 2rem !important;
+}
+
+/* Media queries */
+@media (prefers-color-scheme: dark) {
+
+    /*TODO: These look fairly neglected. Add more and make sure they look good on dark  mode AND mobile later! */
+    body {
+        background-color: #535353 !important;
+    }
+
+    .generic-para {
+        color: #ffffff;
+    }
+
+    .minimalistic {
+        background-color: #535353;
+    }
+
+    p {
+        color: #ffffff;
+    }
+
+    .generic-para1 a {
+        color: #ffffff;
+    }
+
+    .gameInfoName {
+        color: #ffffff;
+    }
+
+    .generic-title {
+        color: #ffffff;
+    }
+
+    .generic-title-deadlyblade {
+        color: #ffffff;
+    }
+
+    .bold-and-centered {
+        color: #ffffff;
+    }
+
+    .lead {
+        color: #ffffff;
+    }
+
+    .minimalistic ul li a {
+        color: #ffffff;
+    }
+
+    .minimalistic h2 {
+        color: #ffa16a;
+        font-size: 2.5em;
+    }
+
+    .insightful {
+        background-color: #3a3a3a;
+    }
+
+    .insightful h2 {
+        color: #ffffff;
+    }
+
+    .insightful p {
+        color: #ffffff;
+    }
+
+    .insightful a {
+        color: #ffffff;
+    }
+
+    .carousel {
+        background-color: #535353;
+    }
+
+    .carousel-item {
+        background-color: #535353;
+    }
+
+    .carousel-item p {
+        color: #ffffff;
+    }
+
+    .carousel-item h3 {
+        color: #ffb158;
+    }
+
+}
+
+/* look at how little light mode has vs dark mode */
+/* todo: maybe add */
+@media (prefers-color-scheme: light) {
+    body {
+        background-color: #b7c3d4;
+    }
+}
+
+/* Animations */
+@keyframes myAnim {
+    0% {
+        transform: scaleX(0.4);
+    }
+
+    100% {
+        transform: scaleX(1);
+    }
+}

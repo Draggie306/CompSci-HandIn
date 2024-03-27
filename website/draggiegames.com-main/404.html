@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 Not Found: Draggie Games</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #000;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .container {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: 5em;
+            color: #fff;
+        }
+
+        p {
+            color: #fff;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            color: #fff;
+            background-color: #007BFF;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+        }
+
+        a:hover {
+            background-color: #0056b3;
+        }
+
+        .star {
+            position: absolute;
+            background-color: #fff;
+            border-radius: 50%;
+            animation: twinkle 2s infinite ease-in-out;
+        }
+
+        .star:hover {
+            animation: glint 0.5s infinite;
+        }
+
+        @keyframes twinkle {
+            0% {
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes glint {
+            0% {
+                background-color: #fff;
+            }
+
+            50% {
+                background-color: #ff0;
+            }
+
+            100% {
+                background-color: #fff;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>404</h1>
+        <p>In a starry night, you are lost in the universe.</p>
+        <a href="/">Return home</a>
+    </div>
+    <script>
+        function createStar() {
+            let star = document.createElement('div');
+            star.className = 'star';
+            star.style.width = Math.random() * 5 + 'px';
+            star.style.height = star.style.width;
+            star.style.top = Math.random() * window.innerHeight + 'px';
+            star.style.left = Math.random() * window.innerWidth + 'px';
+            document.body.appendChild(star);
+            return star;
+        }
+
+        for (let i = 0; i < 100; i++) {
+            createStar();
+        }
+
+        document.addEventListener('mousemove', function (e) {
+            let stars = document.querySelectorAll('.star');
+            stars.forEach(function (star) {
+                let x = (window.innerWidth / 2 - e.pageX) / 30;
+                let y = (window.innerHeight / 2 - e.pageY) / 30;
+                star.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
+            });
+        });
+
+        setInterval(function () {
+            let stars = document.querySelectorAll('.star');
+            stars.forEach(function (star) {
+                star.remove();
+                createStar();
+            });
+        }, 2000);
+    </script>
+</body>
+
+</html>

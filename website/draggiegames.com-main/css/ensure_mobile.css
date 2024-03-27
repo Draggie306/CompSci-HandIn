@@ -1,0 +1,56 @@
+/* draggiegames.com - custom mobile access css */
+/* last updated: October 2nd, 2023 4:03PM */
+
+body {
+    /* using system fonts will haVe a negligible impact on performance */
+    font-family: -apple-system, BlinkMacSystemFont, Roboto, "Segoe UI", "Fira Sans", Avenir, "Helvetica Neue", "Lucida Grande", sans-serif;
+    height: 100vh;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+}
+
+/* todo: use class? */
+input[type="text"],
+input[type="password"] {
+    padding: 12px 20px;
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 10px;
+}
+
+button {
+    padding: 12px 20px;
+    width: 100%;
+    max-width: 300px;
+}
+
+#h2 {
+    font-size: 16px;
+}
+
+@media (max-width: 768px) {
+
+    /* TODO: Okay, this is a little hacky, but future maintenance should add more stuff in here for the media query */
+    h1 {
+        font-size: 32px;
+    }
+
+    h2 {
+        font-size: 16px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+        font-size: 18px;
+    }
+
+    button {
+        font-size: 18px;
+    }
+
+    h3 {
+        font-size: 18px;
+    }
+}

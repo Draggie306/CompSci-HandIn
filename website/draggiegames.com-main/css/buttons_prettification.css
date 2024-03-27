@@ -1,0 +1,546 @@
+/* draggiegames.com - custom button css */
+/* last updated: October 2nd, 2023 4:03PM */
+
+body {
+    margin: 0;
+    color: #000000;
+    background: #ffffff;
+}
+
+.next-error-h1 {
+    border-right: 1px solid rgba(0, 0, 0, .3);
+    /* Makes it black. the alpha value of 0.3 makes it somewhat transparent */
+}
+
+@media (prefers-color-scheme: dark) {
+
+    /* TODO: Add more dark mode styles.
+    The current selection makes the bg and text odd in dark mode.
+     */
+    body {
+        color: #ffffff;
+        background: #000000;
+    }
+
+    .next-error-h1 {
+        border-right: 1px solid rgba(255, 255, 255, .3);
+    }
+}
+
+/* Links section. These should match the colour scheme of the site better*/
+/* unvisited link: https://www.w3schools.com/css/css_link.asp */
+a:link {
+    color: #5162e6;
+}
+
+/* visited link */
+a:visited {
+    color: green;
+}
+
+/* flexing display */
+/* https://stackoverflow.com/questions/20892045/div-not-centering */
+/* playing with flexbox inside the devtools! */
+
+.external-logins {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* All other elements are centered too. */
+    flex-wrap: nowrap;
+    align-content: flex-start;
+    /* This makes flecxbox items alighn to container's top I think */
+    flex-direction: column;
+    /* And this stacks them vertically. Therefore below the login fields, the google/apple buttons are stacked */
+}
+
+/* mouse over link */
+a:hover {
+    color: #0ced84;
+    font-size: larger;
+    transition: 0.5s ease;
+}
+
+/* adding this prevents the user from seeing jarring changes to the text. */
+a:not(:hover) {
+    color: #a18aff;
+    font-size: default;
+    transition: 0.5s ease;
+    display: inline-block;
+}
+
+/* selected link */
+a:active {
+    color: blue;
+}
+
+
+.transparent {
+    background-color: transparent !important;
+    /* Quick fix to add a class for transparency */
+}
+
+@keyframes error_jiggle {
+
+    /* TODO - can we make these completely random? */
+    /* Copied from https://www.w3schools.com/howto/howto_css_shake_image.asp */
+    0% {
+        transform: rotate(0deg);
+        /* background-color: #00000; - not needed after testing*/
+    }
+
+    10% {
+        transform: rotate(3deg);
+    }
+
+    20% {
+        transform: rotate(-3deg);
+    }
+
+    30% {
+        transform: rotate(2deg);
+    }
+
+    40% {
+        transform: rotate(-2deg);
+    }
+
+    50% {
+        transform: rotate(1deg);
+    }
+
+    60% {
+        transform: rotate(-1deg);
+    }
+
+    70% {
+        transform: rotate(0.5deg);
+    }
+
+    80% {
+        transform: rotate(-0.5deg);
+    }
+
+    90% {
+        transform: rotate(0.2deg);
+    }
+
+    /* Fade out the red background */
+    /* This is kind of buggy for now. Todo: Fix this */
+    99% {
+        transform: rotate(0deg);
+        background-color: red;
+        transition-delay: 0.9s;
+    }
+
+    100% {
+        transition-delay: 10s;
+    }
+}
+
+/* Todo: Make this work on the entire page body, therfore remove the class from each element which needs it. */
+.error_jiggle {
+    animation-name: error_jiggle;
+    animation-duration: 0.4s;
+    /* todo: change this to match the shaking messaghe anyway as it cuts off */
+    animation-iteration-count: 1;
+    transition: 0.5s;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* todo: just use a class?! */
+input[type="text"],
+input[type="Password"],
+input[type="Email"] {
+    width: 300px;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    margin: 10px;
+    background-color: #f2f2f2;
+}
+
+select:hover {
+    font-size: larger;
+    transition: 0.5s;
+}
+
+/* Making this happen when no longer hovering is good as it looks less jarring */
+select:not(hover) {
+    font-size: default;
+    transition: 0.5s;
+}
+
+input[type="text"]:hover,
+input[type="Password"]:hover,
+input[type="Email"]:hover {
+    background-color: #a8a8a8;
+    color: white;
+    box-shadow: #000000;
+    transition: 0.5s ease;
+    filter: drop-shadow(0 0 0.75rem rgb(0, 0, 0));
+    /* Just want to use rem instead. because why not */
+    font-size: larger;
+}
+
+/* when no longer hovering */
+input[type="text"]:not(:hover),
+input[type="Password"]:not(:hover),
+input[type="Email"]:not(:hover) {
+    background-color: #f2f2f2;
+    color: black;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    margin: 10px;
+    transition: 0.5s ease;
+}
+
+button[type="submit"] {
+    background-color: green;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #3e8e41;
+    color: white;
+    box-shadow: #000;
+    /* make it fade in to the background new colour */
+    transition: 0.5s ease;
+    filter: drop-shadow(0 0 0.75rem rgb(0, 0, 0));
+    font-size: larger;
+}
+
+/* when no longer hovering */
+button[type="submit"]:not(:hover) {
+    background-color: green;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.5s ease;
+}
+
+button[type="button"] {
+    background-color: #00acff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+.custom-font-roboto {
+    font-family: 'Roboto', sans-serif;
+}
+
+/* TODO: Make sure this works and changes the cursor to have a no entry sign */
+button.disabled:hover {
+    cursor: not-allowed
+}
+
+.noHover {
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+
+/* Classes when autotokenlogin.js is active */
+.noHoverGreyedLoginButton {
+    pointer-events: none;
+    color: #a3a3a3aa;
+    opacity: 70%;
+}
+
+.noHoverGreyedLoginButton:hover {
+    cursor: not-allowed;
+    pointer-events: none;
+    color: #a3a3a3aa;
+    opacity: 70%;
+}
+
+
+/* 
+This makes the placeholder text black and better to see.
+Placholder stuff copied from https://www.w3schools.com/howto/howto_css_placeholder.asp */
+::placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: rgb(0, 0, 0);
+    opacity: 1;
+}
+
+:-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    color: rgb(0, 0, 0);
+}
+
+::-ms-input-placeholder {
+    /* Microsoft Edge */
+    color: rgb(0, 0, 0);
+}
+
+.code_redeem_inputcode {
+    width: 600px;
+    height: 50px;
+    /* looks good to me */
+    background-color: #32920c;
+    text-align: center;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline;
+    /* make it fade in to the background new colour */
+    -webkit-transition: 0.5s ease;
+    transition: 0.5s ease;
+}
+
+.code_redeem_inputcode:hover {
+    background-color: #45c24a;
+    font-size: larger;
+    color: rgb(222, 229, 235);
+    transition: 0.5s ease;
+    text-align: center;
+    filter: drop-shadow(0 0 0.75rem rgb(0, 0, 0));
+}
+
+/* Hidden button */
+
+.post_redeem_download_button {
+    background-color: #00bcdd;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline;
+    font-size: larger;
+    /* bigger after redemption */
+    -webkit-transition: 0.5s ease;
+    transition: 0.5s ease;
+}
+
+.post_redeem_download_button:hover {
+    background-color: #00acff;
+    color: white;
+    box-shadow: #000000;
+    /* make it fade in to the background new colour */
+    transition: 0.5s ease;
+    filter: drop-shadow(0 0 0.75rem rgb(0, 0, 0));
+    font-size: xx-large;
+}
+
+.post_redeem_download_button:not(:hover) {
+    background-color: #00bcdd;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: larger;
+    cursor: pointer;
+    transition: 0.5s ease;
+}
+
+/* Redeem.html - Redeem code input button */
+
+.code_redeem_input_button_submit {
+    background-color: #e0e0e0;
+    border: none;
+    color: black;
+    padding: 16px 32px;
+    text-align: center;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition: 0.3s;
+}
+
+.code_redeem_input_button_submit:hover {
+    background-color: #3e8e41;
+    color: white;
+    box-shadow: #000000;
+    /* make it fade in to the background new colour */
+    transition: 0.5s ease;
+    filter: drop-shadow(0 0 0.75rem rgb(0, 0, 0));
+}
+
+.code_redeem_input_button_submit.disabled:hover {
+    background-color: #3e8e41;
+    color: white;
+    box-shadow: #000000;
+    /* make it fade in to the background new colour */
+    transition: 0.5s ease;
+    filter: drop-shadow(0 0 0.75rem rgb(0, 0, 0));
+    cursor: not-allowed;
+}
+
+/* Delete account button */
+
+.delete_account-button {
+    background-color: rgb(206, 5, 5);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline;
+}
+
+.delete_account-button:hover {
+    background-color: rgb(206, 5, 5);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline;
+    filter: drop-shadow(0 0 10% rgb(214, 5, 5));
+    /* https://www.w3schools.com/howto/howto_css_shake_image.asp */
+    animation: horizontal-shaking 0.5s;
+    transition: 0.5s ease;
+    font-size: larger;
+    /* When the animation is finished, start again */
+    animation-iteration-count: infinite;
+}
+
+.delete_account-button:not(:hover) {
+    background-color: rgb(206, 5, 5);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline;
+    font-size: normal;
+}
+
+
+/* Generic no hover button */
+
+.noHover:hover {
+    background-color: rgb(206, 5, 5);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: not-allowed;
+}
+
+/*
+.noHover {
+    background-color: rgb(206, 5, 5);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: not-allowed;
+} */
+
+/* 
+Cool error shaking screen animation like discord .
+similar to the one above but horizontal only
+*/
+
+@keyframes horizontal-shaking {
+
+    /* https://www.w3schools.com/howto/howto_css_shake_image.asp */
+    /* https://unused-css.com/blog/css-shake-animation/ */
+    0% {
+        transform: translateX(0)
+    }
+
+    /* The element should be fairly random when shaking */
+    5% {
+        transform: translateX(-5px) translateY(-5px)
+    }
+
+    10% {
+        transform: translateX(5px) translateY(5px)
+    }
+
+    15% {
+        transform: translateX(-3px) translateY(-3px)
+    }
+
+    20% {
+        transform: translateX(2px) translateY(2px)
+    }
+
+    25% {
+        transform: translateX(-1px) translateY(-1px)
+    }
+
+    30% {
+        transform: translateX(1px) translateY(1px)
+    }
+
+    35% {
+        transform: translateX(-1px) translateY(-1px)
+    }
+
+    40% {
+        transform: translateX(3px) translateY(3px)
+    }
+
+    45% {
+        transform: translateX(-5px) translateY(-5px)
+    }
+
+    50% {
+        transform: translateX(5px) translateY(5px)
+    }
+
+    55% {
+        transform: translateX(-3px) translateY(-3px)
+    }
+
+    60% {
+        transform: translateX(2px) translateY(2px)
+    }
+
+    65% {
+        transform: translateX(-1px) translateY(-1px)
+    }
+
+    70% {
+        transform: translateX(1px) translateY(1px)
+    }
+
+    75% {
+        transform: translateX(-1px) translateY(-1px)
+    }
+
+    80% {
+        transform: translateX(4px) translateY(4px)
+    }
+
+    85% {
+        transform: translateX(-5px) translateY(-5px)
+    }
+
+    90% {
+        transform: translateX(5px) translateY(5px)
+    }
+
+    95% {
+        transform: translateX(-3px) translateY(-3px)
+    }
+
+    100% {
+        transform: translateX(0) translateY(0)
+    }
+}

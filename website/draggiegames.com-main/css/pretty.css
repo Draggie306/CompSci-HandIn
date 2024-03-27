@@ -1,0 +1,45 @@
+/* draggiegames.com - custom css */
+/* last updated: October 2nd, 2023 4:03PM */
+
+
+/* Copied fro, https://www.w3schools.com/howto/howto_css_login_form.asp */
+.my-div {
+    font-family: -apple-system, BlinkMacSystemFont, Roboto, "Segoe UI", "Fira Sans", Avenir, "Helvetica Neue", "Lucida Grande", sans-serif;
+    height: 100vh;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+}
+
+.my-div h1 {
+    margin: 0;
+    margin-right: 20px;
+    padding: 0 23px 0 0;
+    font-size: 48px;
+    font-weight: 500;
+    vertical-align: top;
+    line-height: 98px;
+}
+
+.my-div h2 {
+    font-size: 28px;
+    font-weight: normal;
+    line-height: 98px;
+    margin: 0;
+    padding: 0;
+}
+
+.my-div .heading-wrapper {
+    display: inline-block;
+    text-align: left;
+    line-height: 98px;
+    height: 98px;
+    vertical-align: middle;
+}
+
+button.disabled:hover {
+    cursor: not-allowed
+}

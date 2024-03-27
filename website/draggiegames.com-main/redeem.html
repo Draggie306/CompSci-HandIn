@@ -1,0 +1,79 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+	<title>Redeem a Draggie Games Code</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Welcome to DraggieGames.com, the hub for the Draggie Games community. Check out the site for features such as game downloads, accessing content, leaderboards, news, and user profiles. The site offers an immersive, coherent and engaging platform for you to connect, share experiences, and stay updated with the latest happenings related to our projects like Project Saturnian. Register now to be part of the growing community, or to redeem your access code!" />
+	<meta name="keywords" content="Draggie Games, gaming community, game downloads, games, leaderboards, news, updates, user profiles, Steam, Discord, Saturnian, draggie, project saturnian, user account management, AI moderation, cool games" />
+	<meta name="author" content="Draggie306" />
+	<meta name="robots" content="index, follow" />
+	<meta property="og:title" content="DraggieGames.com - Games Development and Empowering Gaming Communities" />
+	<meta property="og:description" content="Welcome to DraggieGames.com, the hub for the Draggie Games community. Check out the site for features such as game downloads, accessing content, leaderboards, news, and user profiles. The site offers an immersive, coherent and engaging platform for you to connect, share experiences, and stay updated with the latest happenings related to our projects like Project Saturnian. Register now to be part of the growing community, or to redeem your access code!" />
+	<meta property="og:url" content="https://alpha.draggiegames.com/" />
+	<meta property="og:type" content="website" />
+	<meta property="og:locale" content="en_GB" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="DraggieGames.com - Games Development and Empowering Gaming Communities" />
+	<meta name="twitter:description" content="Welcome to DraggieGames.com, the hub for the Draggie Games community. Check out the site for features such as game downloads, accessing content, leaderboards, news, and user profiles. The site offers an immersive, coherent and engaging platform for you to connect, share experiences, and stay updated with the latest happenings related to our projects like Project Saturnian. Register now to be part of the growing community, or to redeem your access code!" />
+	<meta name="twitter:site" content="@draggie306" />
+    <script src="https://cdn.jsdelivr.net/npm/pace-js@latest/pace.min.js"></script>
+    <link rel="stylesheet" href="css/pace.css">
+</head>
+
+<body>
+    <div id="container_id_for_jiggle" >
+	<div style="font-family:-apple-system, BlinkMacSystemFont, Roboto, &quot;Segoe UI&quot;, &quot;Fira Sans&quot;, Avenir, &quot;Helvetica Neue&quot;, &quot;Lucida Grande&quot;, sans-serif;height:100vh;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center; background-size: cover;">
+		<div>
+            
+
+		<link rel="stylesheet" href="css/buttons_prettification.css">
+
+		<h1 class="next-error-h1" style="display:inline-block;margin:0;margin-right:20px;padding:0 23px 0 0;font-size:48px;font-weight:500;vertical-align:top;line-height:98px">iB + Draggie Games</h1>
+		<div style="display:inline-block;text-align:left;line-height:98px;height:98px;vertical-align:middle">
+			<h2 style="font-size:28px;font-weight:normal;line-height:98px;margin:0;padding:0">
+				Redeem your access key to play!
+			</h2>
+		</div>
+		<br><br><br>
+		<form id="check_code_form">
+			<input class="code_redeem_inputcode" type="code" name="code" placeholder="Enter your code here..." required><br /><br />
+            <br />
+			<button id="code_redeem_input_button_submit" class="code_redeem_input_button_submit" type="submit" style="color: azure;">Redeem code</button>
+		</form>
+        <br />
+		<!-- Hidden button to download -->
+		<!-- <button id="hidden_download_button_redeem" class="hidden_download_button_redeem" style="display: none;">Download!</button> -->
+		<br />
+            <button id="code_redeem_input_button_submit" style="display: none;">Please confirm that you would like to redeem this onto your account.</button>
+        <br />
+
+		<button id="post_redeem_download_button" style="display: none;" onclick="download()">Click to download DraggieTools, from which you can install your program!</button>
+		
+		<script>
+			function download() {
+				// open link with new tab
+				window.open("https://github.com/Draggie306/DraggieTools/raw/main/dist/DraggieTools.exe", "_blank");
+			}
+		</script>
+
+        <h3 style="cursor: pointer;">
+			<a href="/login?return_url=redeem">Want to login? (You must be logged in to redeem a code.)</a>
+		</h3>
+
+		<h3>
+			<a href="https://www.ibaguette.com/p/my-current-projects.html#:~:text=DraggieGames.com%20is%20a%20website%20that%20serves%20as%20the%20online%20hub%20for%20my%20gaming%20community%2C%20Draggie%20Games.">Read more</a>
+		</h3>
+		<script src = "js/redeemer.js"></script>
+        <script src = "js/count.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>  <!-- https://codepen.io/ieatwebsites/pen/KKBvywP https://www.youtube.com/watch?v=tTIaA1Xmzmg -->
+        
+        <script>
+            document.getElementById("check_code_form").addEventListener("submit", function() {
+                document.getElementById("code_redeem_input_button_submit").innerHTML = "Checking validity...";
+            });
+        </script>
+	</div>
+    </div>
+
+</body>
+</html>
