@@ -1,0 +1,10 @@
+2024-03-25 23:59:22,388 - INFO - Starting server...
+2024-03-25 23:59:22,388 - DEBUG - Loading environment variables
+2024-03-25 23:59:22,415 - DEBUG - Ready to serve!
+2024-03-25 23:59:22,415 - DEBUG - Took 0.42008423805236816 seconds to start up. Serving with waitress on port 29171.
+2024-03-25 23:59:22,435 - INFO - Serving on http://0.0.0.0:29171
+2024-03-25 23:59:41,318 - DEBUG - [token_login] User 'Admin' just logged in with a token.
+2024-03-25 23:59:44,371 - DEBUG - [token_login] User 'Admin' just logged in with a token.
+2024-03-25 23:59:45,538 - DEBUG - [token_login] User 'Admin' just logged in with a token.
+2024-03-25 23:59:48,112 - DEBUG - [CheckCode] Received request to check a code
+2024-03-25 23:59:48,258 - DEBUG - [CheckCode] Received request to check a code
