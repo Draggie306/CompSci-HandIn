@@ -1,6 +1,6 @@
-version = "0.8.8"   # in the commit, it must be formatted as "[VERSION HETE] feat: blah", etc.
+version = "1.0.1"   # in the commit, it must be formatted as "[VERSION HETE] feat: blah", etc.
 type = "server"     # major, minor, patch
-commit_time = "26/03/2024 00:01" # UK time (GMT)! 
+commit_time = "01/04/2024 20:41" # UK time (BST)! 
 
 import os, time
 
@@ -109,7 +109,9 @@ beta_codes = os.environ['beta_codes']
 beta_codes = beta_codes.split(",")
 #print(beta_codes)
 
+print(f"api key mailgun: key-{os.environ['mailgun_api_key']}")
 
+print(f"Environment var alpha url: {os.environ['alpha_url']}")
 # testing
 
 # Initialize Flask app and login manager
@@ -488,6 +490,35 @@ def validate_email() -> str:
     save_users(users)
 
 
+@app.route('/api/v1/saturnian/game/accountInfo', methods=['GET'])
+def get_account_info() -> str:
+    token = request.headers.get('Authorisation')
+    print(request.headers)
+    print(f"token found correctly in headers: {token}")
+
+    if token is None:
+        return jsonify({
+            'message': 'No access scopes provided',
+            'error': True
+        }), 401
+
+    user = load_user_from_token(token)
+    if not user:
+        return jsonify({
+            'message': 'No user found with that token',
+            'error': True
+        }), 401
+
+    return jsonify({
+        'message': 'User found successfuly, returnng relevant data',
+        'error': False,
+        'Username': user.username,
+        'Email address': user.email,
+        'Codes redeemed': user.codes,
+        'Entitlements granted': user.entitlements,
+    }), 200
+
+
 # -*-*-*-*-* ALPHA KEY GET REQ *-*-*-*-*-
 
 # this is the GET KEY!!! DO NOT USE TO REDEEM a new code.
@@ -575,7 +606,7 @@ def fetched_redeemed_license_key() -> str:
                 # We have already authenticated the user before, so there was no point rechecking the token validation time
                 log(f"[licenseKeys] User '{user.username}' has entitlement '{entitlement}'")
                 entitlements["saturnian_alpha_tester"] = {
-                    "currentVersion": os.environ['alpha_build'],                        # An integer version that only increments for each new build
+                    "currentVersion": os.environ['alpha_build'],                        # An integer version that only increments for each new build - note: this is pulled as a strinfg, so make sure client can chec for this and not expect it as int
                     "currentVersionString": os.environ['alpha_build_versionString'],    # This is prettier than the build number, and is therefore displayed. Whereas the currentVersion is used for integer comparision
                     "downloadUrl": os.environ['alpha_url'],                             # The URL to pass to the cient to download the game.
                     "type": "alpha",                                                    # The type of the build which is kind of redundant but still useful
@@ -680,7 +711,7 @@ def send_register_message(email, pending_token, username: Optional[str] = "", la
         subject_line = "BEGIN H1 TAG with content 'Welcome to Draggie Games!'"
     elif language == "ie": # Irish
         register_string = register_string_irish
-        subject_line = f"Fáilte go dtí Draggie Games, {username}!"
+        subject_line = f"FÃ¡ilte go dtÃ­ Draggie Games, {username}!"
     elif language == "lolcat":
         register_string = register_string_lolcat
         subject_line = f"WELCOM 2 DRAGGIE GAMEZ, {username.upper()}!!"
@@ -688,7 +719,7 @@ def send_register_message(email, pending_token, username: Optional[str] = "", la
 
     x = requests.post(
         "https://api.eu.mailgun.net/v3/mail.draggiegames.com/messages",
-        auth=("api", "key-a2fa2090c5c96b548ceb8d7742e26637"), ## TODO: FIX THIS!!!! DONT SHOW KEY IN SRC! lmao
+        auth=("api", f"{os.environ['mailgun_api_key']}"),
         data={
             "from": "Draggie Games HQ <register@draggiegames.com>",
             "to": email,
@@ -1634,265 +1665,6 @@ def google_signin():
 
 # -*-*-*-*-* PROTECTED DATA RETRIEVAL (concept - unused) *-*-*-*-*-
 
-
-# -*-*-* HTML CODE FOR EMAIL LANGUAGES *-*-*-*-*-
-
-
-
-register_string_pseudocode = """
-<pre>
-BEGIN HTML DOCUMENT
-    SET document type as HTML
-    BEGIN HTML TAG with language attribute set to 'en'
-    BEGIN HEAD TAG
-        BEGIN META TAG with character set set to 'UTF-8'
-        BEGIN TITLE TAG with content 'Welcome to Draggie Games!'
-        BEGIN STYLE TAG
-            Set styles for body, container, h1, p, and cta-btn
-        END STYLE TAG
-    END HEAD TAG
-    BEGIN BODY TAG
-        BEGIN DIV TAG with class 'container'
-            BEGIN H1 TAG with content 'Welcome to Draggie Games!'
-            BEGIN H2 TAG
-                Set content as a notice and appreciation for collaboration with iBaguette
-            BEGIN P TAG
-                Set content describing the magical kingdom of Draggie Games
-            BEGIN P TAG
-                Set content addressing the recipient {0} and welcoming them to the magical kingdom
-            BEGIN P TAG
-                Set content describing the games offered by Draggie Games
-            BEGIN P TAG
-                Set content informing the importance of choosing a strong password
-            BEGIN P TAG
-                Set content informing about the access to the main Draggie Games website
-            BEGIN P TAG
-                Set content informing about the benefits of being a registered member
-            BEGIN P TAG
-                Set content emphasizing excellent customer service and support
-            BEGIN P TAG
-                Set content thanking the recipient for choosing Draggie Games
-            BEGIN P TAG
-                Set content instructing the recipient to verify their account
-            BEGIN A TAG with href attribute linking to the verification page
-                Set content as '<a href="https://alpha.draggiegames.com/verify_email.html?token={1}" class="cta-btn">Verify email</a>'
-            BEGIN P TAG
-                Set content wishing the recipient magical adventures
-            BEGIN P TAG
-                Set content as 'Sincerely,'
-            BEGIN P TAG
-                Set content as 'The Draggie Games Team'
-        END DIV TAG
-        BEGIN P TAG with style 'text-align: center; font-size: 12px;'
-            Set content about the purpose of the email and the recipient's account registration
-        BEGIN P TAG with id 'copyright' and style 'text-align: center;'
-            Set content as copyright information
-        BEGIN P TAG with style 'text-align: center; font-size: 10px;'
-            Set content indicating the email generation timestamp
-    END BODY TAG
-END HTML DOCUMENT
-</pre>
-"""
-
-register_string_pirate = """
-    <!DOCTYPE html>
-    <html lang='en'>
-        <head>
-            <meta charset='UTF-8'>
-            <title>Avast ye! Welcome to Draggie Games!</title>
-            <style> body {{ font-family: Arial, sans-serif; background-color: #f5f5f5; }} .container {{ max-width: 600px; margin: 0 auto; padding: 20px; background-color: #fff; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); }} h1 {{ color: #ff6600; text-align: center; }} p {{ line-height: 1.5; text-align: justify; }} .cta-btn {{ display: block; width: 200px; margin: 20px auto; padding: 10px; background-color: #ff6600; color: #fff; text-align: center; text-decoration: none; border-radius: 5px; box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3); }} </style>
-        </head>
-    <body>
-        <div class="container">
-        <h1>Avast ye! Welcome to Draggie Games, me heartie!</h1>
-        <h2>Notice: This be a collaboration with iBaguette. By settin' yer eyes on this, ye've already helped me out with me A level Computer Science coursework and more. Thank ye! If ye have any feedback, just let me know, arrr! (Scroll to the bottom to verify yer account, ye can ignore the below monologue)</h2>
-        <p>Once upon a time, in a land far, far away, there was a magical kingdom called Draggie Games. In this land, dragons flew high in the sky, knights fought brave battles, and wizards cast spells to protect the kingdom, aye.</p>
-        <p><strong>Yo ho ho, {0}!</strong>,<br />We be thrilled to welcome ye to our magical kingdom! Ye have successfully registered an account with us, and we can't wait to show ye around, ye scurvy dog.</p>
-        <p>At Draggie Games, we believe in creatin' magic through our games. Each game be designed to take ye on a wondrous adventure filled with mystery, excitement, and joy, arrr. Whether ye want to explore a mystical world, solve challengin' puzzles, or go on thrillin' quests, we have somethin' for every matey on this ship.</p>
-        <p>We understand the importance of keepin' yer account safe from the trolls and goblins that lurk in the shadows, arrr! It be essential to choose a strong and unique password that ye will remember, matey. This will ensure that yer account remains secure, and ye can continue yer magical journey without any interruptions, aye.</p>
-        <p>Once yer access has been granted to the main Draggie Games website browser, ye will be transported to a magical land filled with wonder and adventure. Ye will be able to explore our entire treasure trove of games, each one waitin' to take ye on an enchantin' journey, arrr. Ye can also visit our online market to purchase magical items and virtual doubloons to enhance yer gaming experience, matey.</p>
-        <p>As a registered member of our kingdom, ye will have access to exclusive booty, includin' special events and promotions. Ye can also connect with other scallywags from around the world, share tips and tricks, and make new shipmates, arrr!</p>
-        </p>Avast ye, me hearties! Welcome aboard the Baguette Brigaders, a swashbucklin' Discord crew that be offerin' a treasure trove of activities and resources fer all ye scallywags. Whether ye be seekin' a jolly community, study materials, tech enthusiast banter, games, or even settin' sail on Minecraft servers, Baguette Brigaders be havin' it all. There be truly somethin' for everyone! Join our lively crew on the Discord server, where we engage in spirited discussions, share gaming secrets, and have a grand ol' time together! To join the adventure, simply click <a href="https://discord.com/invite/GfetCXH">here</a> and become a part of the swashbucklin' experience. Yo ho ho!</p>
-        <p>We believe that the key to creatin' magic be through excellent customer service, arrr! If ye have any questions or concerns, please don't hesitate to reach out to us. Our team of dragon-tamin' wizards be always here to help, and we will do everything in our power to make sure that yer journey through our kingdom be filled with wonder and joy, matey.</p>
-        <p>Thank ye again for choosin' Draggie Games as yer gaming destination. We be honored to have ye as a part of our magical kingdom, and we look forward to embarkin' on an unforgettable adventure with ye, arrr!</p>
-        <p>Now, it be time to explore the wonders of Draggie Games. <strong>Click on the button below to verify yer account, ye landlubber!</strong></p>
-        <a href="https://alpha.draggiegames.com/verify_email.html?token={1}" class="cta-btn">Verify email</a>
-        <p>May yer adventures be filled with magic and wonder, arrr!</p>
-        <p>Sincerely,</p>
-        <p>The Draggie Games Crew</p>
-        </div>
-        <p style="text-align: center; font-size: 12px;">This email be sent to <strong>{2}</strong> because ye registered an account with Draggie Games. If ye did not register an account, please ignore this email, matey.</p>
-        <p id="copyright" style="text-align: center;">© 2023 Draggie Games. All rights reserved.</p>
-        <p style="text-align: center; font-size: 10px;">Generated at {3} UTC.</p>
-    </body>
-    /html>
-"""
-
-register_string_en = """
-    <!DOCTYPE html>
-        <html lang='en'>
-        <head>
-            <meta charset='UTF-8'>
-            <title>Welcome to Draggie Games!</title>
-            <style> body {{ font-family: Arial, sans-serif; background-color: #f5f5f5; }} .container {{ max-width: 600px; margin: 0 auto; padding: 20px; background-color: #fff; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); }} h1 {{ color: #ff6600; text-align: center; }} p {{ line-height: 1.5; text-align: justify; }} .cta-btn {{ display: block; width: 200px; margin: 20px auto; padding: 10px; background-color: #ff6600; color: #fff; text-align: center; text-decoration: none; border-radius: 5px; box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3); }} </style>
-        </head>
-        <body>
-            <div class="container">
-            <h1>Welcome to Draggie Games!</h1>
-            <h2>Notice: This is a collaboration with iBaguette. By even reading this, you've already helped me out with my A level Computer Science coursework and more. Thank you! If you've got any feedback, just let me know. (Scroll to the bottom to verify your account, you can ignore the below monologue)</h2>
-            <p>Once upon a time, in a land far, far away, there was a magical kingdom called Draggie Games. In this land, dragons flew high in the sky, knights fought brave battles, and wizards cast spells to protect the kingdom.</p>
-            <p><strong>Dear {0}</strong>,<br />We are thrilled to welcome you to our magical kingdom! You have successfully registered an account with us, and we can't wait to show you around.</p>
-            <p>At Draggie Games, we believe in creating magic through our games. Each game is designed to take you on a wondrous adventure filled with mystery, excitement, and joy. Whether you want to explore a mystical world, solve challenging puzzles, or go on thrilling quests, we have something for everyone.</p>
-            <p>We understand the importance of keeping your account safe from the trolls and goblins that lurk in the shadows. It's essential to choose a strong and unique password that you will remember. This will ensure that your account remains secure, and you can continue your magical journey without any interruptions.</p>
-            <p>Once your access has been granted to the main Draggie Games website browser, you will be transported to a magical land filled with wonder and adventure. You will be able to explore our entire library of games, each one waiting to take you on an enchanting journey. You can also visit our online store to purchase magical items and virtual currency to enhance your gaming experience.</p>
-            <p>As a registered member of our kingdom, you will have access to exclusive content, including special events and promotions. You can also connect with other players from around the world, share tips and tricks, and make new friends.</p>
-            <p>Welcome to Baguette Brigaders, a vibrant and thriving Discord community dedicated to providing a diverse range of activities and resources for its members. Whether you're looking to engage with a lively community, access revision materials, interact with tech enthusiasts, play games, or explore Minecraft servers, Baguette Brigaders has got you covered. There's truly something for everyone. Join the vibrant community on our Discord server, where we engage in lively discussions, share gaming tips and tricks, and have a great time together! To join us, simply click <a href="https://discord.com/invite/GfetCXH">here</a> and become part of the fun-filled experience.</p>
-            <p>We believe that the key to creating magic is through excellent customer service. If you have any questions or concerns, please don't hesitate to reach out to us. Our team dragon-taming wizards is always here to help, and we will do everything in our power to make sure that your journey through our kingdom is filled with wonder and joy.</p>
-            <p>Thank you again for choosing Draggie Games as your gaming destination. We are honored to have you as a part of our magical kingdom, and we look forward to embarking on an unforgettable adventure with you.</p>
-            <p>Now, it's time to explore the wonders of Draggie Games. <strong>Click on the button below to verify your account!</strong></p>
-            <a href="https://alpha.draggiegames.com/verify_email.html?token={1}" class="cta-btn">Verify email</a>
-            <p>May your adventures be filled with magic and wonder!</p>
-            <p>Sincerely,</p>
-            <p>The Draggie Games Team</p>
-            </div>
-            <p style="text-align: center; font-size: 12px;">This email was sent to <strong>{2}<strong> because you registered an account with Draggie Games. If you did not register an account, please ignore this email.</p>
-            <p id="copyright" style="text-align: center;">© 2023 Draggie Games. All rights reserved.</p>
-            <p style="text-align: center; font-size: 10px;">Generated at {3} UTC.</p>
-        </body></html>
-"""
-
-register_string_shakespeare = """
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset='UTF-8'>
-        <title>Welcometh to Draggie Games!</title>
-        <style> body {{ font-family: Arial, sans-serif; background-color: #f5f5f5; }} .container {{ max-width: 600px; margin: 0 auto; padding: 20px; background-color: #fff; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); }} h1 {{ color: #ff6600; text-align: center; }} p {{ line-height: 1.5; text-align: justify; }} .cta-btn {{ display: block; width: 200px; margin: 20px auto; padding: 10px; background-color: #ff6600; color: #fff; text-align: center; text-decoration: none; border-radius: 5px; box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3); }} </style>
-        </head>
-        <body>
-            <div class="container">
-            <h1>Welcometh to Draggie Games!</h1>
-            <h2>Notice: This is a collaboration with iBaguette. By even reading this, you've already helped me out with my A level Computer Science coursework and more. Thank you! If you've got any feedback, just let me know. (Scroll to the bottom to verify your account, you can ignore the below monologue)</h2>
-            <p>Once upon a timeth, in a landeth far, far hence, th're wast a magical kingdom hath called Draggie Games. In this landeth, dragons did fly high in the sky, knights combated brave battles, and wizards did cast spells to protecteth the kingdom. </p>
-            <p><strong>Dear {0}</strong>,<br />we art thrill'd to welcometh thee to our magical kingdom! thee has't successfully regist'r'd an account with us, and we can't waiteth to showeth thee 'round. </p>
-            <p>At Draggie Games, we believeth in creating charm through our games. Each game is design'd to taketh thee on a wondrous adventure did fill with myst'ry, excitement, and joy.  Wheth'r thee wanteth to expl're a mystical w'rld, solveth challenging puzzles, 'r wend on thrilling quests, we has't something f'r ev'ryone. </p>
-            <p>We und'rstand the imp'rtance of keeping thy account safe from the trolls and goblins yond lurk in the shadows. Tis essential to chooseth a stout and unique password yond thee shall rememb'r.  This shall ensureth yond thy account remains secureth, and thee can continueth thy magical journey without any int'rruptions. </p>
-            <p>Once thy access hast been did grant to the main Draggie Games webs'te, thee shall beest transp'rt'd to a magical landeth did fill with wond'r and adventure.  Thee shall beest able to expl're our entire library of games, each one waiting to taketh thee on an enchanting journey.  Thee can eke visiteth our online st're to purchaseth magical items and virtual currency to enhanceth thy gaming exp'rience. </p>
-            <p>As a regist'r'd memb'r of our kingdom, thee shall has't access to exclusive content, enwheeling special events and promotions.  Thee can eke connecteth with oth'r playeth'rs from 'round the w'rld, shareth tips and tricks, and maketh new cater-cousins. </p>
-            <p>Hear ye, hear ye! We bid thee a most hearty welcome to Baguette Brigaders, a verily lively and prosperous Discord community, sworn to provide a diverse range of activities and resources for its esteemed members. Whether thou seeketh to engage with a mirthful assemblage, access revision materials, commune with tech enthusiasts, partake in games, or explore the realms of Minecraft servers, fear not! Baguette Brigaders hath all thy desires accounted for. Verily, there is something to suit the taste of every soul. We do entreat thee to join the vibrant community in our hallowed Discord server, wherein we partake in spirited discussions, exchange gaming tips and tricks, and revel in joyous camaraderie. To join our ranks, simply click upon yon link <a href="https://discord.com/invite/GfetCXH">here</a> and become an integral part of this exuberant and mirth-filled experience. With great anticipation, we await thy arrival amongst our merry band.<p>
-            <p>We believeth yond the key to creating charm is through excellent custom'r service. If 't be true thee has't any questions 'r concerns, please don't hesitate to reacheth out to us.  Our team dragon-taming wizards is at each moment h're to helpeth, and we shall doth everything in our pow'r to maketh sure yond thy journey through our kingdom is did fill with wond'r and joy. </p>
-            <p>Thank thee again f'r choosing draggie games as thy gaming destination. We art honor'd to has't thee as a part of our magical kingdom, and we looketh f'rward to embarking on an unforgettable adventure with thee. </p>
-            <p>Now, 'tis timeth to expl're the wond'rs of draggie games. <strong>Clicketh on the buttoneth below to verify thy account!</strong></p>
-            <a href="https://alpha.draggiegames.com/verify_email.html?token={1}" class="cta-btn">Verify email</a>
-            <p>may thy adventures beest did fill with magic and wond'r!</p>
-            <p>sincerely,</p>
-            <p>the draggie games team</p>
-            </div>
-            <p style="text-align: center; font-size: 12px;">This email wast sent to <strong>{2}<strong> because thee did regist'r an account with Draggie Games.  If 't be true thee did not regist'r an account, please ignore this email.</p>
-            <p id="copyright" style="text-align: center;">© 2023 Draggie Games.  All rights res'rv'd. </p>
-            <p style="text-align: center; font-size: 10px;">Gen'rat'd at {3} UTC. </p>
-        </body></html>
-"""
-
-register_string_irish = """
-    <!DOCTYPE html>
-    <html lang="ga">
-    <head>
-        <meta charset='UTF-8'>
-        <title>Fáilte go Draggie Games!</title>
-        <style> body {{ font-family: Arial, sans-serif; background-color: #f5f5f5; }} .container {{ max-width: 600px; margin: 0 auto; padding: 20px; background-color: #fff; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); }} h1 {{ color: #ff6600; text-align: center; }} p {{ line-height: 1.5; text-align: justify; }} .cta-btn {{ display: block; width: 200px; margin: 20px auto; padding: 10px; background-color: #ff6600; color: #fff; text-align: center; text-decoration: none; border-radius: 5px; }} </style>
-    </head>
-    <body>
-        <div class="container">
-            <h1>Fáilte go Draggie Games!</h1>
-            <h2>Notice: This is a collaboration with iBaguette. By even reading this, you've already helped me out with my A level Computer Science coursework and more. Thank you! If you've got any feedback, just let me know. (Scroll to the bottom to verify your account, you can ignore the below monologue)</h2>
-            <p>Aréirigí, i dtír iargúlta i gcéin, bhí ríocht draíochta darb ainm Draggie Games. Sa tír seo, bhí dragan ag eitilt go hard sa spéir, ridire ag troid cathanna cróga, agus draoithe ag cur spéaclaí chun cosaint ar an ríocht.</p>
-            <p><strong>A chara {0}</strong>,<br />Táimid thar a bheith sásta go bhfuil tú cláraithe linn agus fáilteofar romhat chuig ár ríocht draíochta! Táimid ag súil go mór le do thuras draíochta a thabhairt duit.</p>
-            <p>Ag Draggie Games, creidimid i mbuntáiste a bhaint as ár gcluichí chun draíocht a chruthú. Tá gach cluiche deartha chun tú a thabhairt ar thuras iontach lán le mistéir, bríocht, agus áthas. Is cuma mura mian leat domhan míochaineach a iniúchadh, fadhbanna chasta a réiteach, nó eachtraí spreagúla a thógáil, tá rud éigin againn do gach duine.</p>
-            <p>A thuiscint againn go bhfuil an tábhacht agus an riachtanas ann chun do chuntas a chosaint ó na troillacha agus na goblins a chónaíonn i scáthanna. Níl tú in ann do phasfhocal a athshocrú faoi láthair, mar sin tá sé ríthábhachtach pasfhocal láidir agus uathúil a roghnú atá cuimhnithe agat. Cinntíonn sé seo go bhfanfaidh do chuntas slán agus go mbeidh tú in ann leanúint ar aghaidh le do thuras draíochta gan aon mhoill.</p>
-            <p>Ar dtús, nuair a dtabharfar rochtain duit ar láithreán gréasáin chomh maith leis an mbrabhsálaí príomh-Draggie Games, cuirfear thú i láthair tíre draíochta lán le hiontas agus eachtraíocht. Beidh tú in ann ár leabharlann cluichí iomlána a fhiosrú, agus gach ceann ag fanacht leat ar thuras draíochta. Is féidir leat freisin ár siopa ar líne a fhreastal ar mhíreanna draíochta agus airgeadra fíorúil a cheannach chun do thaithí cluiche a fheabhsú.</p>
-            <p>Mar bhall cláraithe den ríocht seo, beidh rochtain agat ar ábhar faoi leith, lena n-áirítear imeachtaí speisialta agus thionscadail. Is féidir leat teagmháil a dhéanamh le himreoirí eile ó fud na cruinne, le comhairle a roinnt, agus cairde nua a dhéanamh.</p>
-            <p>Ba mhaith linn freisin fáilte a chur romhat chuig Baguette Brigaders, pobal Discord bríomhar agus rathúil atá tiomanta do raon éagsúil gníomhaíochtaí agus acmhainní a sholáthar dá chomhaltaí. Cibé an bhfuil tú ag iarraidh dul i ngleic le pobal bríomhar, rochtain a fháil ar ábhair athbhreithnithe, idirghníomhú le díograiseoirí teicneolaíochta, cluichí a imirt, nó freastal ar fhreastalaithe Minecraft a iniúchadh, tá clú ar Baguette Brigaders agat. Tá rud éigin ann do gach duine i ndáiríre. Bí ar an bpobal bríomhar ar ár bhfreastalaí Discord, áit a ndéanaimid plé bríomhar, roinnimid leideanna agus cleasanna cearrbhachais, agus caithfimid am iontach le chéile! Chun bheith linn, níl le déanamh ach cliceáil ar <a href="https://discord.com/invite/GfetCXH">anseo</a> agus bí mar chuid den eispéireas lán spraíúil.</p>
-            <p>Creidimid gur eol do sheirbhís chustaiméirí den scoth an chéad chéim eile chun draíocht a chruthú. Má tá ceist nó imní ort, ná bíodh leisce ort teagmháil a dhéanamh linn. Tá foireann draoithe a thiománaíonn dragan anseo chun cabhrú, agus déanfaimid gach rud inár gcumhacht chun a chinntiú go bhfuil do thuras trí ár ríocht lán le hiontas agus áthas.</p>
-            <p>Go raibh maith agat arís as Draggie Games a roghnú mar do shuíomh cluichí. Táimid thar a bheith bródúil as tú mar chuid de ár ríocht draíochta, agus táimid ag súil go mór le taisteal ar eachtraíocht neamhghnách leat.</p>
-            <p>Anois, tá sé in am splancanna Draggie Games a fhiosrú. <strong>Cliceáil ar an gcnaipe thíos chun do chuntas a dhearbhú!</strong></p>
-            <a href="https://alpha.draggiegames.com/verify_email.html?token={1}" class="cta-btn">Do chuntas a dhearbhú</a>
-            <p>Go mbeadh draíocht agus iontas i do thuras!</p>
-            <p>Le meas,</p>
-            <p>Foireann Draggie Games</p>
-            </div>
-            <p style="text-align: center; font-size: 12px;">Seoladh an ríomhphost seo chuig <strong>{2}<strong> mar gheall ar do chuntas a chlárú le Draggie Games. Má chláraigh tú cuntas, ná bíodh leisce ort an ríomhphost seo a shéanadh.</p>
-            <p id="copyright" style="text-align: center;">© 2023 Draggie Games. Gach ceart ar cosaint.</p>
-            <p style="text-align: center; font-size: 10px;">Giniúint ag {3} UTC.</p>
-        </div>
-"""
-
-register_string_french = """
-    <!DOCTYPE html>
-    <html lang="fr">
-    <head>
-        <meta charset='UTF-8'>
-        <title>Bienvenue chez Draggie Games!</title>
-        <style> body {{ font-family: Arial, sans-serif; background-color: #f5f5f5; }} .container {{ max-width: 600px; margin: 0 auto; padding: 20px; background-color: #fff; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); }} h1 {{ color: #ff6600; text-align: center; }} p {{ line-height: 1.5; text-align: justify; }} .cta-btn {{ display: block; width: 200px; margin: 20px auto; padding: 10px; background-color: #ff6600; color: #fff; text-align: center; text-decoration: none; border-radius: 5px; box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3); }} </style>
-        </head>
-    <body>
-        <div class="container">
-        <h1>Bienvenue chez Draggie Games!</h1>
-        <h2>Notice: This is a collaboration with iBaguette. By even reading this, you've already helped me out with my A level Computer Science coursework and more. Thank you! If you've got any feedback, just let me know. (Scroll to the bottom to verify your account, you can ignore the below monologue)</h2>
-        <p>Il était une fois, dans un pays lointain, très lointain, un royaume magique appelé Draggie Games. Dans ce pays, les dragons volaient haut dans le ciel, les chevaliers se battaient dans des batailles courageuses et les sorciers lançaient des sorts pour protéger le royaume.</p>
-        <p><strong>Cher {0}</strong>,<br />Nous sommes ravis de vous accueillir dans notre royaume magique! Vous avez créé un compte avec succès, et nous avons hâte de vous faire visiter.</p>
-        <p>Chez Draggie Games, nous croyons en la création de magie à travers nos jeux. Chaque jeu est conçu pour vous emmener dans une aventure merveilleuse remplie de mystère, d'excitation et de joie. Que vous souhaitiez explorer un monde mystique, résoudre des énigmes difficiles ou partir à la recherche de quêtes palpitantes, nous avons quelque chose pour tout le monde.</p>
-        <p>Nous comprenons l'importance de garder votre compte à l'abri des trolls et des gobelins qui se cachent dans l'ombre. Pour le moment, vous ne pourrez pas réinitialiser votre mot de passe, il est donc essentiel d'en choisir un fort et unique que vous vous souviendrez. Cela garantira que votre compte reste sécurisé et que vous pourrez continuer votre voyage magique sans aucune interruption.</p>
-        <p>Une fois que vous aurez accès au navigateur principal du site Web de Draggie Games, vous serez transporté dans un pays magique rempli d'émerveillement et d'aventure. Vous pourrez explorer toute notre bibliothèque de jeux, chacun attendant de vous emmener dans un voyage enchanteur. Vous pourrez également visiter notre boutique en ligne pour acheter des objets magiques et de la monnaie virtuelle pour améliorer votre expérience de jeu.</p>
-        <p>En tant que membre enregistré de notre royaume, vous aurez accès à un contenu exclusif, y compris des événements et des promotions spéciaux. Vous pourrez également vous connecter avec d'autres joueurs du monde entier, partager des conseils et des astuces et vous faire de nouveaux amis.</p>
-        <p>Nous avons hâte de vous accueillir aussi chez les "Baguette Brigaders", une communauté Discord dynamique et florissante dédiée à offrir une large gamme d'activités et de ressources à ses membres. Que vous souhaitiez vous engager avec une communauté animée, accéder à des documents de révision, interagir avec des passionnés de technologie, jouer à des jeux ou explorer des serveurs Minecraft, les Baguette Brigaders sont là pour vous. Il y en a vraiment pour tous les goûts. Rejoignez la communauté dynamique sur notre serveur Discord, où nous participons à des discussions animées, partageons des astuces de jeu et passons un bon moment ensemble ! Pour nous rejoindre, il vous suffit de cliquer <a href="https://discord.com/invite/GfetCXH">ici</a> et de faire partie de cette expérience remplie de divertissement.</p>
-        <p>Nous croyons que la clé pour créer de la magie est un excellent service client. Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Notre équipe de sorciers dompteurs de dragons est toujours là pour vous aider, et nous ferons tout notre possible pour que votre voyage à travers notre royaume soit rempli d'émerveillement et de joie.</p>
-        <p>Merci encore d'avoir choisi Draggie Games comme destination de jeu. Nous sommes honorés de vous avoir comme partie intégrante de notre royaume magique, et nous sommes impatients de partir pour une aventure inoubliable avec vous.</p>
-        <p>Maintenant, il est temps d'explorer les merveilles de Draggie Games. <strong>Cliquez sur le bouton ci-dessous pour vérifier votre compte!</strong></p>
-        <a href="https://alpha.draggiegames.com/verify_email.html?token={1}" class="cta-btn">Vérifier l'email</a>
-        <p>Puisse vos aventures être remplies de magie et d'émerveillement!</p>
-        <p>Sincèrement,</p>
-        <p>L'équipe Draggie Games</p>
-        </div>
-        <p style="text-align: center; font-size: 12px;">Cet email a été envoyé à <strong>{2}<strong> car vous vous êtes inscrit(e)  hez nous, Draggie Games. Si vous n'avez pas crée un compte, vous pouvez ignorer cet email.</p>
-        <p id="copyright" style="text-align: center;">© 2023 Draggie Games. Tous droits réservés.</p>
-        <p style="text-align: center; font-size: 10px;">Généré à {3} UTC.</p>
-    </body>
-</html>
-"""
-
-register_string_lolcat = """
-    <!DOCTYPE html>
-        <html lang="lmao">
-        <head>
-            <meta charset='UTF-8'>
-            <title>WELCOM 2 DRAGGIE GAMEZ!!</title>
-            <style> body {{ font-family: Arial, sans-serif; background-color: #f5f5f5; }} .container {{ max-width: 600px; margin: 0 auto; padding: 20px; background-color: #fff; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); }} h1 {{ color: #ff6600; text-align: center; }} p {{ line-height: 1.5; text-align: justify; }} .cta-btn {{ display: block; width: 200px; margin: 20px auto; padding: 10px; background-color: #ff6600; color: #fff; text-align: center; text-decoration: none; border-radius: 5px; box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3); }} </style>
-        </head>
-        <body>
-            <div class="container">
-            <h1>WELCOM 2 DRAGGIE GAMEZ!</h1>
-            <h2>Notice: This is a collaboration with iBaguette. By even reading this, you've already helped me out with my A level Computer Science coursework and more. Thank you! If you've got any feedback, just let me know. (Scroll to the bottom to verify your account, you can ignore the below monologue)</h2>
-            <p>ONCE UPON TIEM, IN LAND FAR, FAR AWAY, THAR WUZ MAGICAL KINGDOM CALLD DRAGGIE GAMEZ.  IN DIS LAND, DRAGONS FLEW HIGH IN DA SKY, KNITEZ FOUGHT BRAVE BATTLEZ, AN WIZARDZ CAST SPELLS 2 PROTECT TEH KINGDOM.</p>
-            <p><strong>DEAR {0}</strong>,<br />WE R THRILD 2 WELCOM U 2 R MAGICAL KINGDOM! U HAS SUCCESSFULLY REGISTERD AN ACCOUNT WIF US, AN WE CANT W8 2 SHOW U AROUND.</p>
-            <p>AT DRAGGIE GAMEZ, WE BELIEVE IN CREATIN MAGIC THRU R GAMEZ. EACH GAME IZ DESIGEND 2 TAKE U ON WONDROUS ADVENTURE FILLED WIF MYSTERY, EXCITEMENT, AN JOY. WHETHER U WANT 2 EXPLORE MYSTICAL WORLD, SOLVE CHALLENGIN PUZZLEZ, OR GO ON THRILLIN QUESTZ, WE HAS SUMTHIN 4 EVERY1.</p>
-            <p>WE UNDERSTAND DA IMPORTANCE OF KEEPIN UR ACCOUNT SAFE FROM TEH TROLLZ AN GOBLINZ DAT LURK IN DA SHADOWZ. AT DIS TIEM, U WILL NOT B ABLE 2 RESET UR PASSWORD, SO ITS ESSENTIAL 2 CHOOSE STRONG AN UNIQUE 1 DAT U WILL REMEMBR. DIS WILL ENSURE DAT UR ACCOUNT REMAINZ SECURE, AN U CAN CONTINUE UR MAGICAL JOURNEY WIFOUT ANY INTERRUPTIONZ.</p>
-            <p>ONCE UR ACCESS HAS BEEN GRANTED 2 DA MAIN DRAGGIE GAMEZ WEBSITE BROWSER, U WILL B TRANSPORTD 2 MAGICAL LAND FILLED WIF WONDER AN ADVENTURE. U WILL B ABLE 2 EXPLORE R ENTIRE LIBRARY OF GAMEZ, EACH 1 WAITIN 2 TAKE U ON AN ENCHANTIN JOURNEY. U CAN ALSO VISIT R ONLINE STORE 2 PURCHASE MAGICAL ITEMZ AN VIRTUAL CURRENCY 2 ENHANCE UR GAMIN EXPERIENCE.</p>
-            <p>AS REGISTERD MEMBER OF R KINGDOM, U WILL HAS ACCESS 2 EXCLUSIVE CONTENT, INCLUDING SPECIAL EVENTZ AN PROMOTIONZ. U CAN ALSO CONNECT WIF OTHER PLAYRZ FROM AROUND TEH WORLD, SHARE TIPS AN TRICKZ, AN MAEK NEW FRIENDZ.</p>
-            <p>WE WUD ALSO LIEK 2 WELCOM U 2 BAGUETTE BRIGADERS, VIBRANT AN THRIVIN DISCORD COMMUNITY DEDICATD 2 PROVIDIN DIVERSE RANGE OV ACTIVITIEZ AN RESOURCEZ 4 ITZ MEMBERS. WHETHR URE LOOKIN 2 ENGAGE WIF LIVELY COMMUNITY, ACCES REVISHUN MATERIALS, INTERACT WIF TECH ENTHUSIASTS, PULAY GAMEZ, OR EXPLORE MINECRAFT SERVERS, BAGUETTE BRIGADERS HAS GOT U COVERD. THARS TRULY SOMETHIN 4 EVRYONE. JOIN TEH VIBRANT COMMUNITY ON R DISCORD SERVR, WER WE ENGAGE IN LIVELY DISCUSHUNS, SHARE GAMIN TIPS AN TRICKZ, AN HAS GREAT TIEM TOGETHR! 2 JOIN US, SIMPLY CLICK <A HREF="HTTPS://DISCORD.COM/INVITE/GFETCXH">HER</A> AN BECOME PART OV TEH FUN-FILLD EXPERIENCE.</p>
-            <p>WE BELIEVE DAT DA KEY 2 CREATIN MAGIC IZ THRU EXCELLENT CUSTOMR SERVICE. IF U HAS ANY QUESTIONZ OR CONCERNZ, PLZ DONT HESITATE 2 REACH OUT 2 US. R TEAM DRAGON-TAMIN WIZARDZ IZ ALWAYS HERE 2 HELP, AN WE WILL DO EVERYTHIN IN R POWER 2 MAEK SURE DAT UR JOURNEY THRU R KINGDOM IZ FILLED WIF WONDER AN JOY.</p>
-            <p>THANK U AGAIN 4 CHOOSIN DRAGGIE GAMEZ AS UR GAMIN DESTINASHUN. WE R HONORD 2 HAS U AS PART OV R MAGICAL KINGDOM, AN WE LOOK FWD 2 EMBARKIN ON AN UNFORGETTABLE ADVENCHUR WIF U.</p>
-            <p>U CAN ACCESS UR ACCOUNT AT ANY TIEM BY VISITIN <a href="https://alpha.draggiegames.com/">DRAGGIEGAMES.COM</a>.</p>
-            <p>May ur adventurz b filled wif magic an wonder!</p>
-            <p>Sincerely,</p>
-            <p>Da Draggie Gamez Team</p>
-            <a href="https://alpha.draggiegames.com/verify_email.html?token={1}" class="cta-btn">VERIFY UR EMAIL</a>
-            </div>
-            <p style="text-align: center; font-size: 12px;">DIS EMAIL WUZ SENT 2 <strong>{2}</strong> BC U REGISTERD AN ACCOUNT WIF DRAGGIE GAMEZ. IF U DID NOT REGISTER AN ACCOUNT, PLZ IGNORE DIS EMAIL.</p>
-            <p id="copyright" style="text-align: center;">COPIWRITE 2023 DRAGGIE GAMEZ. ALL RIGHTS RESERVD
-            <p style="text-align: center; font-size: 10px;">Generated at {3} UTC.</p>
-        </body>
-"""
 
 log("Ready to serve!")
 
