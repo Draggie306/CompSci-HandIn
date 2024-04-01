@@ -1,10 +1,15 @@
 # Computer Science A Level Project
 This is a monorepo containing all 5 main components of my Computer Science A-level NEA.
 
+## Info
+In each of the folders, another `README.md` shows the structure of that component in more detail.
+
+Look below for how to run each of them from source.
+
 ## How to run
 Go to [compsci-handin.pages.dev](https://compsci-project.pages.dev/). From there, navigate to the Games Library and download the Draggie Games Launcher.
 
-All components are accessible through `Launcher.exe`. Download it and follow what it says. It interacts with the server, allows you to install the Auto-Updater and game itself.
+As designed in the writeup, all components are accessible through `Launcher.exe`. Download it and follow what it says. It interacts with the server, allows you to install the Auto-Updater and game itself.
 
 ## Build from source
 All aspects are designed to be built from source too.
