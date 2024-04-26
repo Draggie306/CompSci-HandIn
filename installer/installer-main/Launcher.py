@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+
+# -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+#
+# Please Note! To run please open "installer-requirements.txt" and install the required modules using pip!
+#
+# -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+
 import tkinter as tk
 import os
 import getpass
@@ -25,9 +33,9 @@ print("Modules loaded.")
 
 global build, client  # we need to define these as global so we can use them in functions.
 
-build = 1                   # Build is used for update checks. if server build is higher than local build, update is available.
-version = "0.2.0 (a)"        # Version is used for logging and update checks, easier to read than build and is the same as the unity version.
-build_date = 1711827786     # Build date is unix time of when the file was compiled.
+build = 5                   # Build is used for update checks. if server build is higher than local build, update is available.
+version = "0.2.2"        # Version is used for logging and update checks, easier to read than build and is the same as the unity version.
+build_date = 1712927786     # Build date is unix time of when the file was compiled.
 
 dev_mode = False
 

@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+
+# -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+#
+# Please Note! To run please open "autoupdate-requirements.txt" and install the required module packages with `pip install -r autoupdate-requirements.txt`
+#
+# -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+
 import asyncio
 import base64
 import datetime
