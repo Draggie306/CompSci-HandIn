@@ -35,26 +35,27 @@ update_refresh_duration_sec = 900 # 15 minutes
 # pip freeze > requirements.txt
 
 
-def w10_toast_notification(title, message, duration: Optional[int] = 10) -> None:
+def w10_toast_notification(title, message, duration: Optional[int] = 10, icon_url: Optional[str] = None) -> None:
     """
     Displays a WIndows 10 system toast notification to the user.
     """
     log_print(f"[toast_notification] Attempting to show a toast notification using plyer notificaitons. Title: {title}, Message: {message}, Duration: {duration}, Icon URL: {icon_url}", True, 2)
-
-    if not os.path.isfile(f"{AutoUpdater_Directory}\\notification-logo.ico"):
-        try:
-            # Get a logo icon from my server
-            download_url = "https://assets.draggie.games/saturnian-content/Saturnian.ico"
+    if icon_url is None:
+        if not os.path.isfile(f"{AutoUpdater_Directory}\\notification-logo.ico"):
+            try:
+                # Get a logo icon from my server
+                download_url = "https://assets.draggie.games/saturnian-content/Saturnian.ico"
+                icon_path = f"{AutoUpdater_Directory}\\notification-logo.ico"
+                x = dash_get(download_url, stream=True)
+                with open(icon_path, "wb") as f:
+                    f.write(x.content)
+            except Exception as e:
+                log_print(f"[toast_notification] An error has occurred downloading the icon. {e}\n{traceback.format_exc()}", True, 4)
+                icon_path = None
+        else:
             icon_path = f"{AutoUpdater_Directory}\\notification-logo.ico"
-            x = dash_get(download_url, stream=True)
-            with open(icon_path, "wb") as f:
-                f.write(x.content)
-        except Exception as e:
-            log_print(f"[toast_notification] An error has occurred downloading the icon. {e}\n{traceback.format_exc()}", True, 4)
-            icon_path = None
     else:
-        icon_path = f"{AutoUpdater_Directory}\\notification-logo.ico"
-
+        icon_path = None
     try:
         print(f"[toast_notification] Showing toast notification: {title} - {message}")  
         notification.notify(
@@ -196,6 +197,7 @@ def dash_get(*args, **kwargs):
 
 w10_toast_notification("Project Saturnian", "The A Level Computer Science Project auto-updater has started.", duration=6)
 
+w10_toast_notification("Project Saturnian Update", f"There is an update available for Project Saturnian, version 23. Downloading now...", duration=10)
 
 def dash_post(*args, **kwargs):
     """
@@ -459,7 +461,7 @@ def saturnian_updater():
 
     def find_exe() -> None:
         """
-        Function to check for an executable file in the root of the SaturnianGame folder. This is used to determine if th game is abe to be played.
+        Subroutine to check for an executable file in the root of the SaturnianGame folder. This is used to determine if th game is abe to be played.
         Todo: Maybe add a check for all the required unity file too for a more thorough check.
         """
         log_print("[saturnian/updater] Checking for executable files...", False, 2)
@@ -483,6 +485,8 @@ def statup_copy_ensure():
     """
     'Ensures' that there is a shortcut in the user's startup folder that points to the auto-updater.
     """
+    shortcut_path = os.path.join(winshell.startup(), "Saturnian-AutoUpdater.lnk")
+
     if not os.path.isfile(target_path):
         log_print(f"[Startup] Target filepath '{target_path}' is not a file.", True)
     if not shortcut_path:
@@ -496,13 +500,6 @@ def statup_copy_ensure():
     shortcut.WorkingDirectory = os.path.dirname(target_path)
     shortcut.save()
 
-
-def startup():
-    """
-    Secondary entrypoint. Creates a shortcut, then asynchronously runs the main function.
-    """
-    statup_copy_ensure()
-    asyncio.run(main())
 
 
 def get_build() -> int:
@@ -526,7 +523,7 @@ def download_new_version():
         os.makedirs(update_directory, exist_ok=True)
     try:
         log_print("[downloadNewVersion/SelfUpdate] Downloading new version of myself from https://raw.githubusercontent.com/Draggie306/ALevel-CS-Project/master/dist/AutoUpdater.exe. This may take a while...", True, 2)
-        download("https://raw.githubusercontent.com/Draggie306/ALevel-CS-Project/master/dist/AutoUpdater.exe", f"{update_directory}\\lily-v{current_build_version}.exe", self_update=True)
+        download("https://raw.githubusercontent.com/Draggie306/ALevel-CS-Project/master/dist/AutoUpdater.exe", f"{update_directory}\\autoupdate-v{current_build_version}.exe", self_update=True)
     except Exception as e:
         return log_print(f"[downloadNewVersion] There was a big error downloading the new version! Unable to download it. {e}\n\n{traceback.format_exc()}", level=4)
 
@@ -625,15 +622,19 @@ async def main() -> None:
 
 # -*-*-*-*-* START *-*-*-*-*-
 
+def startup():
+    statup_copy_ensure()
+    asyncio.run(main())
 
-try:
-    log_print("[init] Starting up...")
+if __name__ == "__main__":
+    try:
+        log_print("[init] Starting up...")
 
-    # Startup triggers the main function as async
-    startup()
-except Exception as e:
-    log_print(f"[init/ERROR] StartupError!: {e}\n{traceback.format_exc()}")
-    time.sleep(10)
-    startup()
+        # Startup triggers the main function as async
+        startup()
+    except Exception as e:
+        log_print(f"[init/ERROR] StartupError!: {e}\n{traceback.format_exc()}")
+        time.sleep(10)
+        startup()
 
 sys.exit()
