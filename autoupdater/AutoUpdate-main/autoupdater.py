@@ -197,8 +197,6 @@ def dash_get(*args, **kwargs):
 
 w10_toast_notification("Project Saturnian", "The A Level Computer Science Project auto-updater has started.", duration=6)
 
-w10_toast_notification("Project Saturnian Update", f"There is an update available for Project Saturnian, version 23. Downloading now...", duration=10)
-
 def dash_post(*args, **kwargs):
     """
     Drop in replacement for requests.post that uses the logging system.
