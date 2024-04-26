@@ -43,4 +43,4 @@ All aspects are designed to be built from source too.
 ### Website
 - Download the contents of `website/draggiegames.com-main`
 - Open `index.html`
-
+- Note that the links may not work as they do not include the ".html" extension when they are hosted on Cloudfare Pages - please add .html to the end of the URL to view the page if it does not load locally
